@@ -5,7 +5,7 @@
 class DemoBase
 {
 public:
-	virtual void init() = 0;
+	virtual void init(int windowWidth, int windowHeight) = 0;
 	virtual void deinit() = 0;
 	virtual void draw() = 0;
 };

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <iostream>
+#include <ctime>
 #include <GL/GLU.h>
 
 #include "camera.h"
@@ -15,6 +16,7 @@
 
 TriangleDemo* demo;
 float zoomFactor = 1.0f;
+bool closeWindow = false;
 
 void onWindowResized(GLFWwindow* window, int width, int height)
 {
@@ -33,16 +35,21 @@ void onWindowResized(GLFWwindow* window, int width, int height)
 	glLoadIdentity();									// Reset The Modelview Matrix
 }
 
-// Simple camera controller. (MOUSE)
+// Simple MOUSE callback
 void onMouseMove(GLFWwindow* window, double x, double y)
 {
 	demo->onMouseMove(x, y);
 }
 
-// Simple camera controller. (MOUSE)
 void onMouseButton(GLFWwindow* window, int button, int action, int mods)
 {
 	demo->onMouseButton(button, action);
+}
+
+void onKeyButton(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE) closeWindow = true;
+	demo->onKeyButton(key, action);
 }
 
 int main()
@@ -74,6 +81,7 @@ int main()
 	// hook mouse move callback and lock/hide mouse cursor.
 	glfwSetCursorPosCallback(window, onMouseMove);
 	glfwSetMouseButtonCallback(window, onMouseButton);
+	glfwSetKeyCallback(window, onKeyButton);
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// initialize OpenGL.
@@ -86,7 +94,7 @@ int main()
 	
 	// initialize demo.
 	demo = new TriangleDemo();
-	demo->init();
+	demo->init(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	// Main loop
 	while (!glfwWindowShouldClose(window))
@@ -94,19 +102,7 @@ int main()
 		// OpenGL rendering goes here...
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Simple camera controller. (KEYBOARD) //Might revive
-		/*
-		float camMoveOffsetX = 0.0f, camMoveOffsetZ = 0.0f;
-		if(glfwGetKey(window, 'A')) camMoveOffsetX -= 0.01f;
-		if(glfwGetKey(window, 'D')) camMoveOffsetX += 0.01f;
-		if(glfwGetKey(window, 'W')) camMoveOffsetZ -= 0.01f;
-		if(glfwGetKey(window, 'S')) camMoveOffsetZ += 0.01f;
-		gCamera.translateLocal(camMoveOffsetX, 0.0f, camMoveOffsetZ);
-		*/
-
-		// Check if ESC key was pressed
-		if(glfwGetKey(window, GLFW_KEY_ESCAPE))
-			break;
+		if (closeWindow) break;
 
 		demo->draw();
 
