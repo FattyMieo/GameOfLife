@@ -147,6 +147,7 @@ public:
 	int cellSize;
 	int boardOffsetX;
 	int boardOffsetY;
+	int preset = 0;
 
 	//Mouse Input Cache
 	int mouseX = 0;
@@ -155,9 +156,8 @@ public:
 	int mouseButton = -1;
 
 	//Buttons
-	int startBtnOffsetX = 15;
-	int btnOffsetX = 5;
-	int btnOffsetY = 75;
+	int btnWidth = 120;
+	int btnHeight = 40;
 	Button playBtn;
 	Button clearBtn;
 	Button sizeBtn;
@@ -192,7 +192,6 @@ public:
 		isSimulated = false;
 
 		boardOffsetX = (windowWidth - (boardWidth * cellSize)) / 2;
-		boardOffsetY = 40;
 
 		int cellsNeeded = boardWidth * boardHeight;
 		int verticesNeeded = cellsNeeded * 18;
@@ -226,10 +225,10 @@ public:
 		loadPNG("../media/Textures/button_map-size.png", mTextureID[2]);
 		loadPNG("../media/Textures/button_speed.png", mTextureID[3]);
 
-		playBtn.init((windowWidth / 4 * 0) + (btnOffsetX * 1) + startBtnOffsetX, windowHeight - btnOffsetY, 150, 50, mTextureID[0]);
-		clearBtn.init((windowWidth / 4 * 1) + (btnOffsetX * 2) + startBtnOffsetX, windowHeight - btnOffsetY, 150, 50, mTextureID[1]);
-		sizeBtn.init((windowWidth / 4 * 2) + (btnOffsetX * 3) + startBtnOffsetX, windowHeight - btnOffsetY, 150, 50, mTextureID[2]);
-		speedBtn.init((windowWidth / 4 * 3) + (btnOffsetX * 4) + startBtnOffsetX, windowHeight - btnOffsetY, 150, 50, mTextureID[3]);
+		playBtn.init((windowWidth / 5 * 1) - (btnWidth / 2), windowHeight - btnHeight, btnWidth, btnHeight, mTextureID[0]);
+		clearBtn.init((windowWidth / 5 * 2) - (btnWidth / 2), windowHeight - btnHeight, btnWidth, btnHeight, mTextureID[1]);
+		sizeBtn.init((windowWidth / 5 * 3) - (btnWidth / 2), windowHeight - btnHeight, btnWidth, btnHeight, mTextureID[2]);
+		speedBtn.init((windowWidth / 5 * 4) - (btnWidth / 2), windowHeight - btnHeight, btnWidth, btnHeight, mTextureID[3]);
 
 		this->windowWidth = windowWidth;
 		this->windowHeight = windowHeight;
@@ -238,6 +237,7 @@ public:
 		boardWidth = 30;
 		boardHeight = 30;
 		cellSize = 12;
+		boardOffsetY = 80;
 
 		initBoard();
 	}
@@ -536,13 +536,52 @@ public:
 			}
 			else if (sizeBtn.isWithinRange(mouseX, mouseY))
 			{
-				boardWidth += 50;
-				boardHeight += 20;
-				cellSize -= 4;
-
-				if (boardWidth > 80) boardWidth = 30;
-				if (boardHeight > 50) boardHeight = 30;
-				if (cellSize < 8) cellSize = 12;
+				++preset;
+				switch (preset)
+				{
+				case 1:
+					boardWidth = 80;
+					boardHeight = 50;
+					cellSize = 8;
+					boardOffsetY = 40;
+					break;
+				case 2:
+					boardWidth = 200;
+					boardHeight = 100;
+					cellSize = 4;
+					boardOffsetY = 40;
+					break;
+				case 3:
+					boardWidth = 500;
+					boardHeight = 250;
+					cellSize = 2;
+					boardOffsetY = 20;
+					break;
+				case 4:
+					boardWidth = 750;
+					boardHeight = 400;
+					boardOffsetY = 20;
+					cellSize = 2;
+					break;
+				case 5:
+					boardWidth = 900;
+					boardHeight = 500;
+					boardOffsetY = 10;
+					cellSize = 2;
+					break;
+				case 6:
+					boardWidth = 960;
+					boardHeight = 521;
+					boardOffsetY = 0;
+					cellSize = 2;
+					break;
+				default:
+					preset = 0;
+					boardWidth = 30;
+					boardHeight = 30;
+					boardOffsetY = 80;
+					cellSize = 12;
+				}
 
 				isSimulated = false;
 

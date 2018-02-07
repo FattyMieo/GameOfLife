@@ -11,8 +11,8 @@
 
 #include "triangle_demo.h"
 
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1080
 
 TriangleDemo* demo;
 float zoomFactor = 1.0f;
@@ -63,7 +63,7 @@ int main()
         return -1;
 
 	// Open an OpenGL window
-	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "OpenGL", NULL, NULL);
+	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "OpenGL", glfwGetPrimaryMonitor(), NULL);
     if (!window)
     {
         glfwTerminate();
